@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Almacen de archivos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header">
+        <h1>Explorador de Archivos</h1>
+        <button class="refresh-btn" onclick="fetchFiles()">
+            <i class="fas fa-sync-alt"></i> Actualizar
+        </button>
+    </div>
+    
+    <div class="path-display">
+        <p>Directorio actual: <span class="current-path"></span></p>
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+            <button id="back-btn" style="display:none; background:#e3eaf6; color:#1976d2; border:none; border-radius:4px; padding:6px 16px; cursor:pointer; font-weight:500;">Volver</button>
+            <button id="root-btn" style="display:none; background:#e3eaf6; color:#1976d2; border:none; border-radius:4px; padding:6px 16px; cursor:pointer; font-weight:500;">Ir a raíz</button>
+        </div>
+        <div class="filter-options" style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+            <div>
+                <label for="sort-select">Ordenar por:</label>
+                <select id="sort-select" onchange="applySort()">
+                    <option value="none">Sin ordenar</option>
+                    <option value="size">Tamaño</option>
+                    <option value="created_at">Fecha de creación</option>
+                    <option value="updated_at">Fecha de actualización</option>
+                </select>
+            </div>
+            <div>
+                <label for="search-input">Buscar:</label>
+                <input type="text" id="search-input" placeholder="Nombre de archivo..." oninput="applySearch()" style="padding: 5px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+        </div>
+    </div>
+    
+    <div id="file-list-container" class="file-list-container">
+        <!-- Las cartas de archivos se generarán aquí dinámicamente -->
+    </div>
+    
+    <div class="status-bar">
+        <span class="item-count"></span>
+    </div>
+
+    <style>
+
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .refresh-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .path-display {
+            padding: 10px 20px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .filter-options {
+            margin-top: 10px;
+        }
+
+        #sort-select {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+    </style>
+
+    <script src="script.js"></script>
+</body>
+</html>

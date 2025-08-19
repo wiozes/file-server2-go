@@ -1,0 +1,251 @@
+/* Contenedor principal con alineación a la derecha */
+.file-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 24px;
+    padding: 24px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* Estilo base para las cartas */
+.file-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 320px; /* Más ancha */
+    min-width: 240px;
+    max-width: 380px;
+    min-height: 180px; /* Menos alta */
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eaeaea;
+    align-items: center; /* Centra todo horizontalmente */
+    justify-content: flex-start;
+    margin: 0 auto;
+    padding: 16px 12px 12px 12px;
+}
+
+/* Efecto hover para las cartas */
+.file-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Media queries para responsividad */
+@media (max-width: 1600px) {
+    .file-card {
+        width: calc((100% - 80px) / 5); /* 5 columnas */
+    }
+}
+
+@media (max-width: 1300px) {
+    .file-card {
+        width: calc((100% - 60px) / 4); /* 4 columnas */
+    }
+}
+
+@media (max-width: 1000px) {
+    .file-card {
+        width: calc((100% - 40px) / 3); /* 3 columnas */
+    }
+}
+
+@media (max-width: 768px) {
+    .file-card {
+        width: 95vw;
+        min-width: 120px;
+        max-width: 100vw;
+        height: auto;
+    }
+    .file-list-container {
+        gap: 12px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .file-list-container {
+        justify-content: center; /* En móviles, centramos */
+    }
+    .file-card {
+        width: 100%; /* 1 columna */
+    }
+}
+
+/* Resto de estilos (iconos, texto, botones) mantienen igual que antes */
+.file-icon-container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    border-bottom: 1px solid #eaeaea;
+}
+
+.file-image {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 8px auto; /* Centrado horizontal y espacio abajo */
+}
+
+.file-info {
+    padding: 16px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.file-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 12px 0;
+    word-break: break-word;
+}
+
+.file-card h3 {
+    font-size: 1.1rem;
+    margin: 0 0 6px 0;
+    text-align: center;
+    word-break: break-all;
+}
+
+.file-card p {
+    margin: 2px 0;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+.file-details {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: auto;
+}
+
+.file-details p {
+    margin: 4px 0;
+}
+
+.file-actions {
+    padding: 0 16px 16px 16px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Botones y efectos especiales mantienen igual */
+
+/* Estilo de los botones */
+.download_btn, .open-btn {
+    background: linear-gradient(90deg, #1976d2 0%, #2196f3 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 8px 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08);
+    transition: 0.2s, box-shadow 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px auto 0 auto;
+    outline: none;
+    text-decoration: none;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: auto;
+    margin-bottom: 12px;
+    align-self: center;
+    margin-top: 10px;
+}
+
+.download_btn:hover, .open-btn:hover {
+    background: linear-gradient(90deg, #1565c0 0%, #1976d2 100%);
+    box-shadow: 0 4px 16px rgba(33, 150, 243, 0.18);
+    transform: translateY(-2px) scale(1.03);
+}
+
+.download_btn a, .open-btn a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.download_btn img, .open-btn img {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
+    margin-right: 4px;
+}
+
+/* Badge para carpetas */
+.folder-badge {
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    background: #2196F3;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+/* Estilos para mensajes de error y vacío */
+.error-message, .empty-folder {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.empty-folder {
+    color: #666;
+    font-style: italic;
+}
+
+/* Efecto para tarjetas de carpeta */
+.file-card.directory {
+    border-left: 4px solid #2196F3;
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+    .file-list-container {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .file-image {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .file-name {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .file-list-container {
+        grid-template-columns: 1fr;
+    }
+}
