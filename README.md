@@ -6,6 +6,7 @@ I still need to implement major improvements (TODO):
 - Settings panel
 - Authentication login
 - Download folders and compress them
+- Permitt only connection from one ip
 
 
 And example of use:
