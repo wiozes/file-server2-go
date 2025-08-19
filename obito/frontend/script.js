@@ -1,5 +1,5 @@
 // Función para obtener los datos de los archivos desde el backend
-const ip = "localhost";
+const ip = "10.43.123.12";
 
 const apiURL = `http://${ip}:8080/api/files`;
 const fileURL = `http://${ip}:8080/files`;
@@ -252,7 +252,7 @@ async function fetchFiles(dirPath = '', page = 1) {
         if (pagination) pagination.style.display = 'none';
     }
     let item_count = document.querySelector('.item-count');
-    item_count.textContent = `${totalFiles} archivos`;
+    item_count.textContent = `${totalFiles} archivos totales`;
     updateBackButton();
 }
 
