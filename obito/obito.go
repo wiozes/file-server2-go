@@ -61,7 +61,8 @@ func filesHandler(rootDir string) http.HandlerFunc {
 				pageSize = n
 			}
 		}
-
+		// --- FIN PAGINACIÓN ---
+		
 		var fileList []FileInfo
 		var id int
 
