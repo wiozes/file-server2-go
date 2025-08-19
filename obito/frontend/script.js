@@ -1,5 +1,5 @@
-// Función para obtener los datos de los archivos desde el backend
-const ip = "10.43.123.12";
+// IP Server
+const ip = "localhost";
 
 const apiURL = `http://${ip}:8080/api/files`;
 const fileURL = `http://${ip}:8080/files`;
