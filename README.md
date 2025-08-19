@@ -6,3 +6,22 @@ I still need to implement major improvements (TODO):
 - Settings panel
 - Authentication login
 - Download folders and compress them
+
+
+And example of use:
+
+```
+go run .\obito.go -s C:\Users\{%username%}\Documents
+
+```
+
+And there are different options:
+
+-s <Route_to_path>
+-host
+-port
+
+
+
+
+
