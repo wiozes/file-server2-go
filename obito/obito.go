@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -47,6 +48,20 @@ func filesHandler(rootDir string) http.HandlerFunc {
 			return
 		}
 
+		// --- PAGINACIÓN ---
+		page := 1
+		pageSize := 50
+		if p := r.URL.Query().Get("page"); p != "" {
+			if n, err := strconv.Atoi(p); err == nil && n > 0 {
+				page = n
+			}
+		}
+		if ps := r.URL.Query().Get("page_size"); ps != "" {
+			if n, err := strconv.Atoi(ps); err == nil && n > 0 {
+				pageSize = n
+			}
+		}
+
 		var fileList []FileInfo
 		var id int
 
@@ -68,7 +83,7 @@ func filesHandler(rootDir string) http.HandlerFunc {
 					log.Printf("Error opening file %s: %v", filePath, err)
 					continue
 				}
-				defer fileHandle.Close() // Usar defer para asegurar el cierre
+				defer fileHandle.Close()
 
 				buffer := make([]byte, 512)
 				n, err := fileHandle.Read(buffer)
@@ -77,7 +92,6 @@ func filesHandler(rootDir string) http.HandlerFunc {
 					continue
 				}
 
-				// Solo usar los bytes realmente leídos
 				if n > 0 || n == 0 {
 					extension := strings.ToLower(filepath.Ext(filePath))
 
@@ -165,8 +179,25 @@ func filesHandler(rootDir string) http.HandlerFunc {
 			})
 		}
 
-		// Codificar respuesta JSON
-		if err := json.NewEncoder(w).Encode(fileList); err != nil {
+		total := len(fileList)
+		start := (page - 1) * pageSize
+		end := start + pageSize
+		if start > total {
+			start = total
+		}
+		if end > total {
+			end = total
+		}
+		pagedFiles := fileList[start:end]
+
+		response := map[string]interface{}{
+			"files":     pagedFiles,
+			"total":     total,
+			"page":      page,
+			"page_size": pageSize,
+		}
+
+		if err := json.NewEncoder(w).Encode(response); err != nil {
 			log.Printf("Error encoding JSON: %v", err)
 			http.Error(w, `{"error": "Error generating JSON response"}`, http.StatusInternalServerError)
 		}

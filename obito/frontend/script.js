@@ -83,6 +83,64 @@ let currentSort = 'none';
 let currentSearch = '';
 let currentDirPath = '';
 
+// --- PAGINACIÓN ---
+let currentPage = 1;
+let pageSize = 50;
+let totalFiles = 0;
+
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 800;
+}
+
+function updatePageSize() {
+    pageSize = isMobile() ? 10 : 50;
+}
+
+function renderPagination() {
+    const container = document.getElementById('file-list-container');
+    let pagination = document.getElementById('pagination-controls');
+    if (!pagination) {
+        pagination = document.createElement('div');
+        pagination.id = 'pagination-controls';
+        pagination.style.display = 'flex';
+        pagination.style.justifyContent = 'center';
+        pagination.style.gap = '8px';
+        pagination.style.margin = '16px 0';
+        container.parentNode.insertBefore(pagination, container.nextSibling);
+    }
+    pagination.innerHTML = '';
+    const totalPages = Math.ceil(totalFiles / pageSize);
+    if (totalPages <= 1) {
+        pagination.style.display = 'none';
+        return;
+    }
+    pagination.style.display = 'flex';
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = 'Anterior';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => {
+        if (currentPage > 1) {
+            currentPage--;
+            fetchFiles(currentDirPath, currentPage);
+        }
+    };
+    pagination.appendChild(prevBtn);
+    // Mostrar número de página
+    const pageInfo = document.createElement('span');
+    pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
+    pagination.appendChild(pageInfo);
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = 'Siguiente';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            fetchFiles(currentDirPath, currentPage);
+        }
+    };
+    pagination.appendChild(nextBtn);
+}
+
 function applySearch() {
     const input = document.getElementById('search-input');
     currentSearch = input ? input.value.trim().toLowerCase() : '';
@@ -152,16 +210,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-async function fetchFiles(dirPath = '') {
+async function fetchFiles(dirPath = '', page = 1) {
+    updatePageSize();
     fetchCurrentPath();
     let url = apiURL;
-    // Solo agregar ?dir= si dirPath es string y no es vacío ni '/'
+    let params = [];
     if (typeof dirPath === 'string' && dirPath.trim() !== '' && dirPath !== '/') {
-        const cleanDir = dirPath.replace(/^\/+|\/+$/g, '');
-        url += '?dir=' + encodeURIComponent(cleanDir);
+        const cleanDir = dirPath.replace(/^\/+/g, '').replace(/\/+$/g, '');
+        params.push('dir=' + encodeURIComponent(cleanDir));
         currentDirPath = cleanDir;
     } else {
         currentDirPath = '';
+    }
+    params.push('page=' + page);
+    params.push('page_size=' + pageSize);
+    if (params.length > 0) {
+        url += '?' + params.join('&');
     }
     try {
         const response = await fetch(url);
@@ -169,20 +233,26 @@ async function fetchFiles(dirPath = '') {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        if (!Array.isArray(data)) {
-            throw new Error("La respuesta del servidor no es un array válido");
+        if (!data.files || !Array.isArray(data.files)) {
+            throw new Error("La respuesta del servidor no es válida");
         }
-        currentFiles = data;
+        currentFiles = data.files;
+        totalFiles = data.total || 0;
+        currentPage = data.page || 1;
+        pageSize = data.page_size || pageSize;
         applySort();
+        renderPagination();
     } catch (error) {
         console.error('Error:', error);
         document.getElementById('file-list-container').innerHTML = `
             <div class="error-message">
                 <p>Error al cargar los archivos: ${error.message}</p>
             </div>`;
+        let pagination = document.getElementById('pagination-controls');
+        if (pagination) pagination.style.display = 'none';
     }
-    item_count = document.querySelector('.item-count');
-    item_count.textContent = `${currentFiles.length} archivos`;
+    let item_count = document.querySelector('.item-count');
+    item_count.textContent = `${totalFiles} archivos`;
     updateBackButton();
 }
 
@@ -299,4 +369,18 @@ function createFileCard(file) {
     }
 }
 
-window.addEventListener('DOMContentLoaded', fetchFiles);
+// Actualizar pageSize si cambia el tamaño de pantalla
+window.addEventListener('resize', () => {
+    const oldPageSize = pageSize;
+    updatePageSize();
+    if (oldPageSize !== pageSize) {
+        currentPage = 1;
+        fetchFiles(currentDirPath, currentPage);
+    }
+});
+
+// Llamar fetchFiles al cargar
+window.addEventListener('DOMContentLoaded', () => {
+    updatePageSize();
+    fetchFiles();
+});
