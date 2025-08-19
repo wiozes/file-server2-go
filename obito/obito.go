@@ -239,7 +239,7 @@ func main() {
 	}
 
 	if *dirPath == "" {
-		log.Fatal("Error: La ruta del directorio es requeridaa: go run main.go -s /ruta/a/tus/archivos")
+		log.Fatal("Error: La ruta del directorio es requerida: go run main.go -s /ruta/a/tus/archivos")
 	}
 
 	runFileServer(*dirPath, *port, *host)
