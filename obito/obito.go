@@ -255,11 +255,11 @@ func main() {
 	show_options := `Options: 
 			-s <path>   Ruta del directorio a servir
 			-host <host> Host del servidor (default: localhost)
-			-server_port <port>   Puerto del servidor (default: 8080)
+			-port <port>   Puerto del servidor (default: 8080)
 			-h 		  Muestra esta ayuda
 		`
 	dirPath := flag.String("s", "", "Ruta del directorio a servir")
-	port := flag.String("server_port", "8080", "Puerto del servidor (default: 8080)")
+	port := flag.String("port", "8080", "Puerto del servidor (default: 8080)")
 	help_options := flag.Bool("h", false, show_options)
 	host := flag.String("host", "localhost", "Host del servidor (default: localhost)")
 
