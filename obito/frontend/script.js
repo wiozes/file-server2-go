@@ -1,6 +1,14 @@
 // IP Server
 const ip = "localhost";
 
+// Get ip from settings.yaml
+function getServerIP() {
+    let filename = 'settings.yaml';
+    
+}
+
+
+
 const apiURL = `http://${ip}:8080/api/files`;
 const fileURL = `http://${ip}:8080/files`;
 const currentPathURL = `http://${ip}:8080/api/currentPath`;

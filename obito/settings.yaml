@@ -1,0 +1,10 @@
+server:
+  port: 8080
+  host: localhost
+  Authentication:
+    enabled: false
+    defaultUser: admin
+    defaultPassword: password
+  permitedIPs: *
+  canRemoveFiles: false
+  canRemoveFolders: false
